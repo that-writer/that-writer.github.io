@@ -1,0 +1,137 @@
+import { useRoute, Link } from 'wouter';
+
+/**
+ * Design Philosophy: Minimalist Elegance
+ * - Pure monochrome palette (black, white, grays)
+ * - Readex Pro font throughout
+ * - Focus on content with ample whitespace
+ * - Subtle, slow transitions
+ * - Thin horizontal lines for section separation
+ */
+
+const POSTS_DATA: Record<string, any> = {
+  'intro-digital-writing': {
+    title: 'مقدمة إلى الكتابة الرقمية',
+    date: '٧ أبريل ٢٠٢٦',
+    category: 'الكتابة',
+    content: `
+      <p>الكتابة الرقمية ليست مجرد نقل الكلمات من الورق إلى الشاشة. إنها فن جديد يتطلب فهماً عميقاً للوسيط والقارئ والرسالة.</p>
+      
+      <h3>التحديات الجديدة</h3>
+      <p>عندما نكتب على الإنترنت، نواجه تحديات فريدة. القارئ يمكنه أن يغادر في أي لحظة، والانتباه محدود، والمنافسة على الاهتمام شرسة.</p>
+      
+      <h3>الفرص المتاحة</h3>
+      <p>لكن هناك أيضاً فرص لم تكن متاحة من قبل. يمكننا أن نصل إلى ملايين القراء، ويمكننا أن نتفاعل معهم بشكل مباشر، ويمكننا أن نتعلم من ردود أفعالهم.</p>
+      
+      <p>الكتابة الرقمية هي فن التوازن بين هذه التحديات والفرص.</p>
+    `,
+  },
+  'simplicity-design': {
+    title: 'البساطة في التصميم',
+    date: '٥ أبريل ٢٠٢٦',
+    category: 'التصميم',
+    content: `
+      <p>البساطة ليست غياب الشيء، بل هي غياب الفوضى. التصميم البسيط لا يعني أن يكون فارغاً أو ممله، بل يعني أن كل عنصر له غرض واضح.</p>
+      
+      <h3>مبادئ التصميم البسيط</h3>
+      <p>أولاً، التركيز. اختر ما هو مهم حقاً وأزل كل شيء آخر. ثانياً، الوضوح. اجعل الرسالة واضحة جداً بحيث لا يمكن لأحد أن يسيء فهمها. ثالثاً، الجمال. البساطة جميلة بطبيعتها.</p>
+      
+      <h3>الفوائد العملية</h3>
+      <p>التصميم البسيط أسهل في الاستخدام، أسرع في التحميل، وأكثر سهولة في الصيانة. إنه يعمل بشكل أفضل على جميع الأجهزة والشاشات.</p>
+      
+      <p>البساطة هي النهاية النهائية للتصميم الجيد.</p>
+    `,
+  },
+  'philosophy-contemporary': {
+    title: 'قراءة في الفلسفة المعاصرة',
+    date: '٢ أبريل ٢٠٢٦',
+    category: 'الفلسفة',
+    content: `
+      <p>الفلسفة المعاصرة تحاول الإجابة على الأسئلة الأبدية بطرق جديدة. كيف نعيش حياة ذات معنى؟ ما هي طبيعة الحقيقة؟ كيف يجب أن نتعامل مع بعضنا البعض؟</p>
+      
+      <h3>التحديات الحديثة</h3>
+      <p>في عصر التكنولوجيا والعولمة، تواجه الفلسفة تحديات جديدة. كيف نحافظ على إنسانيتنا في عالم رقمي؟ كيف نتعامل مع الفوارق الثقافية والحضارية؟</p>
+      
+      <h3>الأمل في الحوار</h3>
+      <p>لكن هناك أمل في الحوار. عندما نستمع إلى بعضنا البعض، عندما نحاول أن نفهم وجهات نظر مختلفة، يمكننا أن نجد حلولاً جديدة.</p>
+      
+      <p>الفلسفة المعاصرة هي دعوة للتفكير النقدي والحوار المفتوح.</p>
+    `,
+  },
+};
+
+export default function Post() {
+  const [match, params] = useRoute('/post/:slug');
+
+  if (!match) {
+    return null;
+  }
+
+  const slug = params?.slug as string;
+  const post = POSTS_DATA[slug];
+
+  if (!post) {
+    return (
+      <div className="min-h-screen bg-white text-black" dir="rtl">
+        <div className="max-w-2xl mx-auto px-4 py-12">
+          <h1 className="text-2xl font-bold mb-4">المقالة غير موجودة</h1>
+          <Link href="/">
+            <a className="text-black hover:text-gray-600 transition-colors duration-200">
+              العودة إلى الرئيسية
+            </a>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-white text-black" dir="rtl">
+      {/* Header */}
+      <header className="border-b border-gray-200">
+        <div className="max-w-2xl mx-auto px-4 py-8">
+          <Link href="/">
+            <a className="text-gray-600 hover:text-black transition-colors duration-200 mb-6 inline-block">
+              ← العودة
+            </a>
+          </Link>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-2xl mx-auto px-4 py-12">
+        <article>
+          <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
+
+          <div className="flex items-center gap-4 mb-8 text-sm text-gray-600">
+            <time>{post.date}</time>
+            <span className="text-gray-400">•</span>
+            <span>{post.category}</span>
+          </div>
+
+          <div className="border-t border-gray-200 mb-8" />
+
+          <div
+            className="prose prose-sm max-w-none text-gray-800 leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
+
+          <div className="border-t border-gray-200 mt-12 pt-8">
+            <Link href="/">
+              <a className="text-black hover:text-gray-600 transition-colors duration-200 font-medium">
+                ← العودة إلى جميع المقالات
+              </a>
+            </Link>
+          </div>
+        </article>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 mt-16">
+        <div className="max-w-2xl mx-auto px-4 py-8 text-center text-sm text-gray-600">
+          <p>© ٢٠٢٦ سبخة. جميع الحقوق محفوظة.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}

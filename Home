@@ -1,0 +1,144 @@
+import { useState } from 'react';
+import { Link } from 'wouter';
+
+/**
+ * Design Philosophy: Minimalist Elegance
+ * - Pure monochrome palette (black, white, grays)
+ * - Readex Pro font throughout
+ * - Focus on content with ample whitespace
+ * - Subtle, slow transitions
+ * - Thin horizontal lines for section separation
+ */
+
+interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  slug: string;
+  category: string;
+}
+
+const SAMPLE_POSTS: BlogPost[] = [
+  {
+    id: '1',
+    title: 'مقدمة إلى الكتابة الرقمية',
+    excerpt: 'استكشاف فن الكتابة في العصر الرقمي وتأثيرها على القراء والمحتوى.',
+    date: '٧ أبريل ٢٠٢٦',
+    slug: 'intro-digital-writing',
+    category: 'الكتابة',
+  },
+  {
+    id: '2',
+    title: 'البساطة في التصميم',
+    excerpt: 'لماذا يعتبر التصميم البسيط أكثر فعالية من التصاميم المعقدة.',
+    date: '٥ أبريل ٢٠٢٦',
+    slug: 'simplicity-design',
+    category: 'التصميم',
+  },
+  {
+    id: '3',
+    title: 'قراءة في الفلسفة المعاصرة',
+    excerpt: 'نقاش حول الأفكار الفلسفية الحديثة وتطبيقاتها في حياتنا اليومية.',
+    date: '٢ أبريل ٢٠٢٦',
+    slug: 'philosophy-contemporary',
+    category: 'الفلسفة',
+  },
+];
+
+export default function Home() {
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  const categories = Array.from(new Set(SAMPLE_POSTS.map(post => post.category)));
+  
+  const filteredPosts = selectedCategory
+    ? SAMPLE_POSTS.filter(post => post.category === selectedCategory)
+    : SAMPLE_POSTS;
+
+  return (
+    <div className="min-h-screen bg-white text-black" dir="rtl">
+      {/* Header */}
+      <header className="border-b border-gray-200">
+        <div className="max-w-2xl mx-auto px-4 py-12">
+          <h1 className="text-4xl font-bold mb-2">سبخة</h1>
+          <p className="text-gray-600 text-lg">مدونة بسيطة عن الكتابة والتصميم والأفكار</p>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-2xl mx-auto px-4 py-12">
+        {/* Category Filter */}
+        <div className="mb-12">
+          <p className="text-sm text-gray-600 mb-4">التصنيفات</p>
+          <div className="flex flex-wrap gap-3">
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className={`px-4 py-2 border transition-colors duration-200 ${
+                selectedCategory === null
+                  ? 'bg-black text-white border-black'
+                  : 'bg-white text-black border-gray-300 hover:border-black'
+              }`}
+            >
+              الكل
+            </button>
+            {categories.map(category => (
+              <button
+                key={category}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 border transition-colors duration-200 ${
+                  selectedCategory === category
+                    ? 'bg-black text-white border-black'
+                    : 'bg-white text-black border-gray-300 hover:border-black'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Posts List */}
+        <div className="space-y-12">
+          {filteredPosts.map((post, index) => (
+            <article key={post.id}>
+              <Link href={`/post/${post.slug}`}>
+                <a className="group">
+                  <h2 className="text-2xl font-bold mb-2 group-hover:text-gray-600 transition-colors duration-200">
+                    {post.title}
+                  </h2>
+                </a>
+              </Link>
+              
+              <div className="flex items-center gap-4 mb-4 text-sm text-gray-600">
+                <time>{post.date}</time>
+                <span className="text-gray-400">•</span>
+                <span>{post.category}</span>
+              </div>
+
+              <p className="text-gray-700 leading-relaxed mb-4">
+                {post.excerpt}
+              </p>
+
+              <Link href={`/post/${post.slug}`}>
+                <a className="text-black font-medium hover:text-gray-600 transition-colors duration-200 inline-block">
+                  اقرأ المزيد →
+                </a>
+              </Link>
+
+              {index < filteredPosts.length - 1 && (
+                <div className="border-t border-gray-200 mt-12" />
+              )}
+            </article>
+          ))}
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-gray-200 mt-16">
+        <div className="max-w-2xl mx-auto px-4 py-8 text-center text-sm text-gray-600">
+          <p>© ٢٠٢٦ سبخة. جميع الحقوق محفوظة.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
